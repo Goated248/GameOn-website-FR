@@ -42,41 +42,41 @@ function validerNom(nom , champNom) {
 
 //pour valider le prénom
 
-function validerPrenom(prenom) {
-  console.log(prenom)
+function validerPrenom(prenom , champPrenom) {
+  
   if (prenom.length >= 2) {
     return true
   }
-  
+  showerror(champPrenom , "le prénom doit contenir au moins 2 caractères")
   return false
 }
 
 //pour valider mail
 
-function validerMail (email) {
-  console.log(email)
+function validerMail (email, champEmail) {
+  
   let emailRegex = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+")
   if (emailRegex.test(email)) {
     return true
   }
-  
+  showerror(champEmail , "L'email est invalide")
   return false
 }
 
 //pour valider le nombre de tournoi du participant
 
-function validerNbrTournoi (nbrTournoi) {
-  console.log(nbrTournoi)
+function validerNbrTournoi (nbrTournoi , champNbrTournoi) {
+ 
 if(nbrTournoi.trim()=== '') {
 
-  console.log("nombre de tournoi : le champs est vide")
+  showerror(champNbrTournoi, "Ce champs doit être rempli")
   return false 
 }
 
   if (!isNaN(nbrTournoi)) {
     return true
   }
-  
+  showerror(champNbrTournoi, "Le nombre doit être entre 0 et 99")
   return false
 }
 
@@ -85,13 +85,14 @@ if(nbrTournoi.trim()=== '') {
 function validerVilleTournoi () {
   
   let btnVille = document.querySelectorAll('input[type="radio"]');
+  let champVille = btnVille[0].closest(".formData")
   for (let i = 0; i < btnVille.length; i++) {
     if (btnVille[i].checked) {
-      console.log(btnVille)
+      
       return true;
     }
   }
-  
+  showerror(champVille , "Vous devez choisir une option")
   return false;
 }
 
@@ -99,15 +100,21 @@ function validerVilleTournoi () {
 
 function validerConditions() {
 let condition = document.getElementById("checkbox1")
- return condition.checked 
-
+let champCondition = condition.closest(".formData")
+ if(condition.checked) {
+  return true
+ } else {
+  showerror(champCondition, "Vous devez accepter les conditions d'utilisations")
+  return false
+ }
 }
+
 //pour verifier si une date est remplie et au bon format
 
-function validerBirthdate(birthdate){
-  console.log(birthdate)
+function validerBirthdate(birthdate ,champBirthdate){
+  
   if( birthdate === "") {
-    
+    showerror(champBirthdate, "Vous devez entrer votre date de naissance")
     return  false
   }
   let dateActuelle = new Date ()
@@ -116,12 +123,14 @@ function validerBirthdate(birthdate){
   if (dateActuelle >=birthdateClient) {
     return true
   }
-  
+  showerror(champBirthdate, "Vous devez entrer une date de naissance valide")
   return false
 
 
 }
 
+
+// pour gerer et afficher les messages d'erreur
 function showerror (element , message) {
 
   let inputParent = element.closest(".formData")
@@ -141,12 +150,15 @@ function showerror (element , message) {
 
 
   inputParent.appendChild(messageErreur)
-  console.log("message ajouté" , messageErreur)
+
 }
 
-//fonction de control de validation des champs avant submit
+//fonction de controle de validation des champs avant submit
 function validate() {
-    
+  //effacement des erreurs précédente éventuelle
+ document.querySelectorAll(".formData span[data-error]").forEach(span => span.remove())   
+
+ //récupération des elements html
 let champPrenom = document.getElementById("first")
 let prenom = champPrenom.value
 
@@ -162,25 +174,17 @@ let nbrTournoi= champNbrTournoi.value
 let champBirthdate = document.getElementById("birthdate")
 let birthdate = champBirthdate.value
 
+//creation des variables avec résultats des fonctions de validations
+let nomValid = validerNom(nom, champNom)
+let prenomValid = validerPrenom(prenom, champPrenom)
+let emailValid = validerMail(email , champEmail)
+let nbrTournoiValid = validerNbrTournoi(nbrTournoi,champNbrTournoi)
+let villeValid = validerVilleTournoi()
+let conditionValid = validerConditions()
+let birthdateValid = validerBirthdate(birthdate,champBirthdate)
 
-
-
-
-
-if (validerNom (nom,champNom)&& 
-
-validerPrenom(prenom)&&
-
-validerMail (email)&&
-
-validerBirthdate(birthdate)&&
-
-validerNbrTournoi (nbrTournoi)&&
-
-validerVilleTournoi ()&&
-
-validerConditions()
-) {
+//validation de la fonction selon resultat des validations
+if (nomValid && prenomValid && emailValid && nbrTournoiValid && villeValid && conditionValid && birthdateValid){
   console.log("validé")
 return true
 } else {
@@ -190,14 +194,13 @@ return true
 
 }
 
-function envoyerFormulaire () {
-if (validate()) {
-  return true
-} else {
-  return false
-}
-
-  }
+//function envoyerFormulaire () {
+//if (validate()) {
+  //return true
+//} else {
+  //return false
+//}
+//}
 
 
 //empeche le rechargement de la page quand le formulaire est submit
