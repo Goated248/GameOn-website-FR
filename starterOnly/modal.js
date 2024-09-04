@@ -29,12 +29,13 @@ function launchModal() {
 
 // pour valider le nom
 
-function validerNom(nom) {
-  console.log(nom)
+function validerNom(nom , champNom) {
+ 
   if (nom.length >= 2) {
     return true
   }
-  console.log("nom invalide")
+  
+ showerror(champNom , "Le nom doit contenir au moins 2 caractères")
   return false
 
 }
@@ -46,7 +47,7 @@ function validerPrenom(prenom) {
   if (prenom.length >= 2) {
     return true
   }
-  console.log("prenom invalide")
+  
   return false
 }
 
@@ -58,7 +59,7 @@ function validerMail (email) {
   if (emailRegex.test(email)) {
     return true
   }
-  console.log("email invalide")
+  
   return false
 }
 
@@ -75,7 +76,7 @@ if(nbrTournoi.trim()=== '') {
   if (!isNaN(nbrTournoi)) {
     return true
   }
-  console.log("nombre de tournoi invalide")
+  
   return false
 }
 
@@ -90,7 +91,7 @@ function validerVilleTournoi () {
       return true;
     }
   }
-  console.log("case non coché")
+  
   return false;
 }
 
@@ -106,7 +107,7 @@ let condition = document.getElementById("checkbox1")
 function validerBirthdate(birthdate){
   console.log(birthdate)
   if( birthdate === "") {
-    console.log("la date est vide")
+    
     return  false
   }
   let dateActuelle = new Date ()
@@ -115,12 +116,33 @@ function validerBirthdate(birthdate){
   if (dateActuelle >=birthdateClient) {
     return true
   }
-  console.log("la date est invalide")
+  
   return false
 
 
 }
 
+function showerror (element , message) {
+
+  let inputParent = element.closest(".formData")
+
+  let existingError = inputParent.querySelector("span[data-error]")
+
+  if(existingError) {
+    return
+  }
+  
+  
+   let messageErreur = document.createElement("span")
+   messageErreur.innerText = message
+   messageErreur.setAttribute("data-error", message)
+   messageErreur.setAttribute("data-error-visible", "true")
+
+
+
+  inputParent.appendChild(messageErreur)
+  console.log("message ajouté" , messageErreur)
+}
 
 //fonction de control de validation des champs avant submit
 function validate() {
@@ -141,23 +163,11 @@ let champBirthdate = document.getElementById("birthdate")
 let birthdate = champBirthdate.value
 
 
-let nomValid = validerNom(nom)
-let prenomValid = validerPrenom(prenom)
-let emailValid = validerMail(email)
-let nbrTournoiValid = validerNbrTournoi(nbrTournoi)
-let villeValid = validerVilleTournoi()
-let conditionValid = validerConditions()
-let birthdateValid = validerBirthdate(birthdate)
 
-console.log(nomValid)
-console.log(prenomValid)
-console.log(emailValid)
-console.log(nbrTournoiValid)
-console.log(villeValid)
-console.log(conditionValid)
-console.log(birthdateValid)
 
-if (validerNom (nom)&& 
+
+
+if (validerNom (nom,champNom)&& 
 
 validerPrenom(prenom)&&
 
@@ -195,4 +205,6 @@ let submitForm = document.querySelector("form")
 
 submitForm.addEventListener("submit", (event) => {
   event.preventDefault()
+  //fonction validate
+  //fonction envoyerForm
 })
