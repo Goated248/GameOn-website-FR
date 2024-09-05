@@ -8,9 +8,10 @@ function editNav() {
 }
 
 // DOM Elements
-const modalbg = document.querySelector(".bground");
+const modalbg = document.getElementById("modal-form");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
+const modalConfirm = document.getElementById("modal-confirm")
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -155,6 +156,35 @@ function hideError (element) {
   inputParent.removeAttribute("data-error-visible")
 }
 
+
+//pour afficher fenetre de confirmation
+
+function showConfirm () {
+
+  
+  let modalHeight = modalbg.querySelector('.content').offsetHeight
+
+  modalbg.style.display = "none"
+  modalConfirm.style.display = "flex"
+
+
+  modalConfirm.querySelector('.content').style.height = modalHeight + 'px'
+
+
+
+  let closeCross = document.getElementById("close-confirm")
+  let closebtn = document.getElementById("close-confirm-btn")
+
+  closeCross.addEventListener ("click" , () => {
+    modalConfirm.style.display = "none"
+  } )
+
+  closebtn.addEventListener ("click" , () => {
+    modalConfirm.style.display= "none"
+  })
+}
+
+
 //fonction de controle de validation des champs avant submit
 function validate() {
  
@@ -188,6 +218,7 @@ let birthdateValid = validerBirthdate(birthdate,champBirthdate)
 //validation de la fonction selon resultat des validations
 if (nomValid && prenomValid && emailValid && nbrTournoiValid && villeValid && conditionValid && birthdateValid){
   console.log("validé")
+  showConfirm()
 return true
 } else {
   console.log("erreur")

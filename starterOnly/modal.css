@@ -166,6 +166,8 @@ main {
   width: 100%;
   overflow: auto;
   background-color: rgba(26, 39, 156, 0.4);
+  justify-content: center;
+  align-items: center;
 }
 
 .content {
@@ -180,11 +182,17 @@ main {
   position: relative;
   color: #fff;
   padding-top: 10px;
+  
 }
 
 .modal-body {
   padding: 15px 8%;
   margin: 15px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 label {
@@ -220,6 +228,7 @@ input {
   transition: 0.3s;
 }
 .formData[data-error-visible="true"]::after {
+  display: flex;
   opacity: 1;
 }
 .formData[data-error-visible="true"] .text-control {
@@ -331,6 +340,10 @@ input[data-error]::after {
   color: #fff;
   cursor: pointer;
   border: 0;
+}
+#close-confirm-btn {
+  position: absolute;
+  bottom: 20px;
 }
 /* custom select styles */
 .custom-select {
