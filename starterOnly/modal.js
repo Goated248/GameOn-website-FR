@@ -32,6 +32,7 @@ function launchModal() {
 function validerNom(nom , champNom) {
  
   if (nom.length >= 2) {
+    hideError(champNom)
     return true
   }
   
@@ -45,6 +46,7 @@ function validerNom(nom , champNom) {
 function validerPrenom(prenom , champPrenom) {
   
   if (prenom.length >= 2) {
+    hideError(champPrenom)
     return true
   }
   showerror(champPrenom , "le prénom doit contenir au moins 2 caractères")
@@ -57,6 +59,7 @@ function validerMail (email, champEmail) {
   
   let emailRegex = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+")
   if (emailRegex.test(email)) {
+    hideError(champEmail)
     return true
   }
   showerror(champEmail , "L'email est invalide")
@@ -74,6 +77,7 @@ if(nbrTournoi.trim()=== '') {
 }
 
   if (!isNaN(nbrTournoi)) {
+    hideError(champNbrTournoi)
     return true
   }
   showerror(champNbrTournoi, "Le nombre doit être entre 0 et 99")
@@ -88,7 +92,7 @@ function validerVilleTournoi () {
   let champVille = btnVille[0].closest(".formData")
   for (let i = 0; i < btnVille.length; i++) {
     if (btnVille[i].checked) {
-      
+      hideError(champVille)
       return true;
     }
   }
@@ -102,6 +106,7 @@ function validerConditions() {
 let condition = document.getElementById("checkbox1")
 let champCondition = condition.closest(".formData")
  if(condition.checked) {
+  hideError(champCondition)
   return true
  } else {
   showerror(champCondition, "Vous devez accepter les conditions d'utilisations")
@@ -121,6 +126,7 @@ function validerBirthdate(birthdate ,champBirthdate){
   let birthdateClient = new Date (birthdate) 
   
   if (dateActuelle >=birthdateClient) {
+    hideError(champBirthdate)
     return true
   }
   showerror(champBirthdate, "Vous devez entrer une date de naissance valide")
@@ -130,33 +136,29 @@ function validerBirthdate(birthdate ,champBirthdate){
 }
 
 
-// pour gerer et afficher les messages d'erreur
+// pour afficher les messages d'erreur
 function showerror (element , message) {
 
   let inputParent = element.closest(".formData")
 
-  let existingError = inputParent.querySelector("span[data-error]")
+   inputParent.setAttribute("data-error", message)
+   inputParent.setAttribute("data-error-visible", "true")
 
-  if(existingError) {
-    return
-  }
-  
-  
-   let messageErreur = document.createElement("span")
-   messageErreur.innerText = message
-   messageErreur.setAttribute("data-error", message)
-   messageErreur.setAttribute("data-error-visible", "true")
+}
+//pour effacer les messages d'erreur
 
+function hideError (element) {
 
+  let inputParent = element.closest(".formData")
 
-  inputParent.appendChild(messageErreur)
-
+  inputParent.removeAttribute("data-error")
+  inputParent.removeAttribute("data-error-visible")
 }
 
 //fonction de controle de validation des champs avant submit
 function validate() {
-  //effacement des erreurs précédente éventuelle
- document.querySelectorAll(".formData span[data-error]").forEach(span => span.remove())   
+ 
+
 
  //récupération des elements html
 let champPrenom = document.getElementById("first")
@@ -194,13 +196,15 @@ return true
 
 }
 
-//function envoyerFormulaire () {
-//if (validate()) {
-  //return true
-//} else {
-  //return false
+//function afficherFenetre () {
+ // let fenetre = document.createElement("div")
+ // fenetre.innerHTML = `
+//  <p>Inscription validée</p>
+ // <button id= "close-btn">fermer</button>
+  //`
+
 //}
-//}
+
 
 
 //empeche le rechargement de la page quand le formulaire est submit
@@ -208,6 +212,8 @@ let submitForm = document.querySelector("form")
 
 submitForm.addEventListener("submit", (event) => {
   event.preventDefault()
-  //fonction validate
-  //fonction envoyerForm
+  validate()
+    //afficherfenetre()
+  //}
+ 
 })
